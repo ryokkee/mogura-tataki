@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>モグラたたきゲーム</title>
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+	</head>
+
+	<body id="game">
+		<div class="field">
+			<h1><img src="images/title.png" alt="" /></h1>
+			<h2 id="counter">0</h2>
+			<div class="container">
+				<div class="relative">
+					<img class="ana" src="images/穴.png" />
+					<img class="mogura uwagaki" src="" />
+				</div>
+				<div class="relative">
+					<img class="ana" src="images/穴.png" />
+					<img class="mogura uwagaki" src="" />
+				</div>
+				<div class="relative">
+					<img class="ana" src="images/穴.png" />
+					<img class="mogura uwagaki" src="" />
+				</div>
+			</div>
+			<div class="container">
+				<div class="relative">
+					<img class="ana" src="images/穴.png" />
+					<img class="mogura uwagaki" src="" />
+				</div>
+				<div class="relative">
+					<img class="ana" src="images/穴.png" />
+					<img class="mogura uwagaki" src="" />
+				</div>
+				<div class="relative">
+					<img class="ana" src="images/穴.png" />
+					<img class="mogura uwagaki" src="" />
+				</div>
+			</div>
+			<div class="container">
+				<div class="relative">
+					<img class="ana" src="images/穴.png" />
+					<img class="mogura uwagaki" src="" />
+				</div>
+				<div class="relative">
+					<img class="ana" src="images/穴.png" />
+					<img class="mogura uwagaki" src="" />
+				</div>
+				<div class="relative">
+					<img class="ana" src="images/穴.png" />
+					<img class="mogura uwagaki" src="" />
+				</div>
+			</div>
+		</div>
+
+		<script>
+			let moguras = [];
+			let hitCount = 0;
+
+			let counter = document.getElementById('counter');
+			counter.countUp = () => {
+				hitCount += 1;
+				counter.innerText = hitCount;
+			};
+
+			function Mogura(e1) {
+				this.body = e1;
+
+				let face = {
+					hide: '', //隠れているとき
+					normal: 'images/normal.png', //出現したとき
+					hit: 'images/hit.png', //叩かれたとき
+				};
+
+				this.hit = () => {
+					this.body.src = face.hit;
+					setTimeout(this.hide, 200); //ヒットした200ms後に隠れる
+					counter.countUp();
+				};
+
+				this.appear = () => {
+					this.body.src = face.normal;
+					//this.body.src = face.glass
+				};
+
+				this.hide = () => {
+					this.body.src = face.hide;
+					this.TimeoutId = setTimeout(this.appear, 3000 * Math.random()); //0ms ~ 3000msで再び現れる。
+					this.TimeoutId = setTimeout(this.hide, 2000); //2000msで隠れる。
+				};
+
+				this.clear = () => {
+					this.body.src = face.hide;
+					clearTimeout(this.TimeoutId);
+				};
+
+				this.hide();
+				this.body.onclick = this.hit; //クリック時の処理
+			}
+
+			function initialize() {
+				//全てのモグラに対して、クリックされたイベントを登録する
+				let arr = document.getElementsByClassName('mogura'); //9体分のモグラ
+				for (let i = 0; i < arr.length; i++) {
+					moguras.push(new Mogura(arr[i]));
+				}
+
+				setTimeout(() => {
+					alert('あなたが対峙したモグラは' + hitCount + 'です');
+				}, 5000);
+			}
+
+			initialize();
+		</script>
+	</body>
+</html>
